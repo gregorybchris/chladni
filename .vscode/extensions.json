@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "denoland.vscode-deno",
+    "sastan.twind-intellisense"
+  ]
+}
