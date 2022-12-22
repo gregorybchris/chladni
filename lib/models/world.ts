@@ -1,6 +1,5 @@
-import Particle from "./particle.ts";
-import Point from "./point.ts";
-import PointRange from "./point-range.ts";
+import { Point, PointRange } from "../math";
+import Particle from "./particle";
 
 export default interface World {
   particles: Particle[];

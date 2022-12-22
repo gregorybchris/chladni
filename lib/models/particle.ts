@@ -1,4 +1,4 @@
-import Point from "./point.ts";
+import { Point } from "../math";
 
 export default interface Particle {
   position: Point;

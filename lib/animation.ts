@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "preact/hooks";
+import { useEffect, useRef } from "react";
 
 export function useAnimationFrame(callback: (deltaTime: number) => void, running: boolean) {
   const requestRef = useRef<number>();
