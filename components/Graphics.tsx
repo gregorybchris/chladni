@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import World from "../lib/models/world";
-import { useAnimationFrame } from "../lib/animation";
+import { useAnimationFrame } from "../lib/hooks/animation";
 import { Color, colorToHex } from "../lib/color";
 import Particle from "../lib/models/particle";
 import { Point, PointRange, scalePoint } from "../lib/math";
@@ -11,16 +11,19 @@ interface GraphicsProps {
   world: World;
 }
 
+const GRAPHICS_WIDTH = 600;
+const GRAPHICS_HEIGHT = 450;
 const GRAPHICS_BOUNDS: PointRange = {
-  x: { min: 0, max: 600 },
-  y: { min: 0, max: 450 },
+  x: { min: 0, max: GRAPHICS_WIDTH },
+  y: { min: 0, max: GRAPHICS_HEIGHT },
 };
-const GRAPHICS_WIDTH = GRAPHICS_BOUNDS.x.max - GRAPHICS_BOUNDS.x.min;
-const GRAPHICS_HEIGHT = GRAPHICS_BOUNDS.y.max - GRAPHICS_BOUNDS.y.min;
 
 export default function Graphics(props: GraphicsProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  let graphicsViewPort = 0;
+  let graphicsViewPort: PointRange = {
+    x: { min: -50, max: GRAPHICS_WIDTH + 50 },
+    y: { min: -50, max: GRAPHICS_HEIGHT + 50 },
+  };
   useAnimationFrame(props.onUpdate, props.running);
 
   useEffect(() => {
@@ -78,7 +81,10 @@ export default function Graphics(props: GraphicsProps) {
 
   return (
     <div className="w-full h-full flex justify-center">
-      <canvas className="rounded-3xl border-2 border-slate-600" ref={canvasRef}></canvas>
+      <canvas
+        className="bg-gradient-to-tr from-zinc-800 to-zinc-700 shadow-[-10px_10px_60px_15px_rgba(0,0,0,0.5)]"
+        ref={canvasRef}
+      ></canvas>
     </div>
   );
 }
