@@ -12,9 +12,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>resonate</title>
-        <meta name="title" content="resonate" />
-        <meta name="description" content="resonate" />
+        <title>chladni</title>
+        <meta name="title" content="chladni" />
+        <meta name="description" content="chladni" />
         {/* <link rel="icon" href="/favicon.png" /> */}
       </Head>
 

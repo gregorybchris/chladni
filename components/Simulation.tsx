@@ -29,29 +29,27 @@ export interface SimulationParameterRanges {
   speed: Range;
 }
 
-const PARAM_RANGES: SimulationParameterRanges = {
-  n: { min: 1, max: 20 },
-  m: { min: 1, max: 20 },
-  a: { min: -3, max: 3 },
-  b: { min: -3, max: 3 },
-  zoom: { min: 0.001, max: 0.1 },
-  speed: { min: 0.0, max: 0.2 },
-};
+const NUM_PARTICLES = 6000;
 
 export default function Simulation(props: SimulationProps) {
   const [world, setWorld] = useState<World>(initWorld());
-  const parameters = useRef<SimulationParameters>(initParameters());
+  const parameters = useRef<SimulationParameters>({
+    n: 5,
+    m: 2,
+    a: 1,
+    b: -1,
+    zoom: 0.01,
+    speed: 0.1,
+  });
 
-  function initParameters(): SimulationParameters {
-    return {
-      n: 7,
-      m: 1,
-      a: 1,
-      b: -1,
-      zoom: 0.01,
-      speed: 0.1,
-    };
-  }
+  const paramRanges: SimulationParameterRanges = {
+    n: { min: 1, max: 20 },
+    m: { min: 1, max: 20 },
+    a: { min: -3, max: 3 },
+    b: { min: -3, max: 3 },
+    zoom: { min: 0.001, max: 0.02 },
+    speed: { min: 0.0, max: 0.2 },
+  };
 
   function initWorld(): World {
     const bounds = {
@@ -59,7 +57,6 @@ export default function Simulation(props: SimulationProps) {
       y: { min: -100, max: 100 },
     };
 
-    const NUM_PARTICLES = 5000;
     const particles = [];
     for (let i = 0; i < NUM_PARTICLES; i++) {
       const particle: Particle = {
@@ -75,14 +72,10 @@ export default function Simulation(props: SimulationProps) {
   }
 
   function onUpdate(deltaTime: number) {
-    setWorld((world) => updateWorld(world, deltaTime));
-  }
-
-  function updateWorld(world: World, deltaTime: number): World {
-    return {
+    setWorld((world) => ({
       ...world,
       particles: world.particles.map((p) => updateParticle(p, world.bounds, deltaTime)),
-    };
+    }));
   }
 
   function updateParticle(particle: Particle, bounds: PointRange, deltaTime: number): Particle {
@@ -118,7 +111,7 @@ export default function Simulation(props: SimulationProps) {
   return (
     <div className="flex justify-center">
       <Graphics running={props.running} onUpdate={onUpdate} world={world} />
-      <Controls parameters={parameters.current} ranges={PARAM_RANGES} onUpdateParameter={onUpdateParameter} />
+      <Controls parameters={parameters.current} ranges={paramRanges} onUpdateParameter={onUpdateParameter} />
     </div>
   );
 }

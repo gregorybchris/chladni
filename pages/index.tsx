@@ -12,7 +12,15 @@ export default function HomePage() {
   return (
     <div className="w-full h-full">
       <div>
-        <span className="flex justify-center py-8 pb-16 text-2xl">resonate</span>
+        <div className="pt-8 pb-16">
+          <a
+            className="flex justify-center"
+            href="https://en.wikipedia.org/wiki/Ernst_Chladni#Chladni_figures"
+            target="_blank"
+          >
+            <div className="inline-block py-2 px-4 text-2xl">chladni</div>
+          </a>
+        </div>
         <Simulation running={running} setRunning={setRunning} />
       </div>
     </div>

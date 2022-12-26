@@ -65,7 +65,7 @@ export default function Graphics(props: GraphicsProps) {
   }
 
   function renderParticle(context: CanvasRenderingContext2D, particle: Particle) {
-    const particleRadius = 1.4;
+    const particleRadius = 1;
     const particleColor = Color.BLUE;
 
     const position = transformPosition(particle.position);

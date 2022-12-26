@@ -36,12 +36,6 @@ export default function Controls(props: ControlsProps) {
         onChange={(value: number) => props.onUpdateParameter("zoom", value)}
         stepSize={0.001}
       />
-      <Slider
-        range={props.ranges.speed}
-        defaultValue={props.parameters.speed}
-        onChange={(value: number) => props.onUpdateParameter("speed", value)}
-        stepSize={0.1}
-      />
     </div>
   );
 }
