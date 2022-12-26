@@ -1,41 +1,41 @@
+import { Range } from "../lib/math";
 import { SimulationParameterRanges, SimulationParameters } from "./Simulation";
-import Slider from "./Slider";
+import Slider from "../widgets/Slider";
 
 interface ControlsProps {
-  onUpdateParameter: (param: string, value: number) => void;
-  parameters: SimulationParameters;
+  onUpdate: (param: string, value: number) => void;
+  params: SimulationParameters;
   ranges: SimulationParameterRanges;
 }
 
 export default function Controls(props: ControlsProps) {
   return (
     <div className="w-48 pl-12">
-      <Slider
-        range={props.ranges.n}
-        defaultValue={props.parameters.n}
-        onChange={(value: number) => props.onUpdateParameter("n", value)}
-      />
-      <Slider
-        range={props.ranges.m}
-        defaultValue={props.parameters.m}
-        onChange={(value: number) => props.onUpdateParameter("m", value)}
-      />
-      <Slider
-        range={props.ranges.a}
-        defaultValue={props.parameters.a}
-        onChange={(value: number) => props.onUpdateParameter("a", value)}
-      />
-      <Slider
-        range={props.ranges.b}
-        defaultValue={props.parameters.b}
-        onChange={(value: number) => props.onUpdateParameter("b", value)}
-      />
-      <Slider
-        range={props.ranges.zoom}
-        defaultValue={props.parameters.zoom}
-        onChange={(value: number) => props.onUpdateParameter("zoom", value)}
-        stepSize={0.001}
-      />
+      <Control range={props.ranges.a} v={props.params.a} param="a" onChange={props.onUpdate} />
+      <Control range={props.ranges.b} v={props.params.b} param="b" onChange={props.onUpdate} />
+      <Control range={props.ranges.n} v={props.params.n} param="n" onChange={props.onUpdate} />
+      <Control range={props.ranges.m} v={props.params.m} param="m" onChange={props.onUpdate} />
+      <Control range={props.ranges.z} v={props.params.z} param="z" onChange={props.onUpdate} stepSize={0.001} />
+      <Control range={props.ranges.o} v={props.params.o} param="o" onChange={props.onUpdate} />
+    </div>
+  );
+}
+
+interface ControlProps {
+  range: Range;
+  v: number;
+  param: string;
+  stepSize?: number;
+  onChange: (param: string, v: number) => void;
+}
+
+function Control({ range, v, param, stepSize, onChange }: ControlProps) {
+  return (
+    <div className="flex items-center">
+      <div className="pr-3 align-middle">{param}</div>
+      <div className="align-middle w-32">
+        <Slider range={range} defaultValue={v} onChange={(v: number) => onChange(param, v)} stepSize={stepSize} />
+      </div>
     </div>
   );
 }

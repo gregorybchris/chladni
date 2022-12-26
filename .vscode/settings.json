@@ -3,6 +3,7 @@
   "[html]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[json]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[markdown]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[sass]": { "editor.formatOnSave": true, "editor.defaultFormatter": "syler.sass-indented" },
   "[javascript]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[toml]": { "editor.defaultFormatter": "be5invis.toml" },

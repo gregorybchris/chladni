@@ -12,21 +12,21 @@ interface SimulationProps {
 }
 
 export interface SimulationParameters {
-  n: number;
-  m: number;
   a: number;
   b: number;
-  zoom: number;
-  speed: number;
+  n: number;
+  m: number;
+  z: number;
+  o: number;
 }
 
 export interface SimulationParameterRanges {
-  n: Range;
-  m: Range;
   a: Range;
   b: Range;
-  zoom: Range;
-  speed: Range;
+  n: Range;
+  m: Range;
+  z: Range;
+  o: Range;
 }
 
 const NUM_PARTICLES = 6000;
@@ -34,21 +34,21 @@ const NUM_PARTICLES = 6000;
 export default function Simulation(props: SimulationProps) {
   const [world, setWorld] = useState<World>(initWorld());
   const parameters = useRef<SimulationParameters>({
-    n: 5,
-    m: 2,
     a: 1,
     b: -1,
-    zoom: 0.01,
-    speed: 0.1,
+    n: 5,
+    m: 2,
+    z: 0.01,
+    o: 1,
   });
 
   const paramRanges: SimulationParameterRanges = {
-    n: { min: 1, max: 20 },
-    m: { min: 1, max: 20 },
     a: { min: -3, max: 3 },
     b: { min: -3, max: 3 },
-    zoom: { min: 0.001, max: 0.02 },
-    speed: { min: 0.0, max: 0.2 },
+    n: { min: 1, max: 10 },
+    m: { min: 1, max: 10 },
+    z: { min: 0.001, max: 0.02 },
+    o: { min: 0, max: 1 },
   };
 
   function initWorld(): World {
@@ -79,16 +79,17 @@ export default function Simulation(props: SimulationProps) {
   }
 
   function updateParticle(particle: Particle, bounds: PointRange, deltaTime: number): Particle {
-    const { n, m, a, b, zoom, speed } = parameters.current;
+    const { n, m, a, b, z, o } = parameters.current;
+    const speed = 0.1;
 
     const f = (x: number, y: number) =>
-      a * Math.sin(Math.PI * n * x * zoom) * Math.sin(Math.PI * m * y * zoom) +
-      b * Math.sin(Math.PI * m * x * zoom) * Math.sin(Math.PI * n * y * zoom);
+      a * Math.sin(Math.PI * n * x * z) * Math.sin(Math.PI * m * y * z) +
+      b * Math.sin(Math.PI * m * x * z) * Math.sin(Math.PI * n * y * z);
     const g = (x: number, y: number) => Math.abs(f(x, y));
 
     const { x, y } = particle.position;
     const rRange = { min: 0.1, max: 1 };
-    const r = clipValue(g(x, y) * deltaTime * speed, rRange);
+    const r = o ? clipValue(g(x, y) * deltaTime * speed, rRange) : rRange.max;
 
     const theta = random.float(0, 2 * Math.PI);
     const dx = r * Math.cos(theta);
@@ -111,7 +112,7 @@ export default function Simulation(props: SimulationProps) {
   return (
     <div className="flex justify-center">
       <Graphics running={props.running} onUpdate={onUpdate} world={world} />
-      <Controls parameters={parameters.current} ranges={paramRanges} onUpdateParameter={onUpdateParameter} />
+      <Controls params={parameters.current} ranges={paramRanges} onUpdate={onUpdateParameter} />
     </div>
   );
 }
