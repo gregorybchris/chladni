@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
         {/* <link rel="icon" href="/favicon.png" /> */}
       </Head>
 
-      <div className="min-w-screen min-h-screen bg-zinc-900 md:py-10 text-slate-200 font-main">
+      <div className="min-w-screen min-h-screen bg-zinc-900 text-slate-200 font-main">
         <Component {...pageProps} />
       </div>
     </>

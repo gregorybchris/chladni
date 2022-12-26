@@ -1,36 +1,55 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Particle from "../lib/models/particle";
 import World from "../lib/models/world";
-import { PointRange, clipPoint, clipValue, randPoint } from "../lib/math";
+import { Range, PointRange, clipPoint, clipValue, randPoint } from "../lib/math";
 import random from "random";
 import Graphics from "./Graphics";
+import Controls from "./Controls";
 
 interface SimulationProps {
   running: boolean;
   setRunning: (running: boolean) => void;
 }
 
-interface SimulationParameters {
-  speed: number;
+export interface SimulationParameters {
   n: number;
   m: number;
   a: number;
   b: number;
-  w: number;
+  zoom: number;
+  speed: number;
 }
+
+export interface SimulationParameterRanges {
+  n: Range;
+  m: Range;
+  a: Range;
+  b: Range;
+  zoom: Range;
+  speed: Range;
+}
+
+const PARAM_RANGES: SimulationParameterRanges = {
+  n: { min: 1, max: 20 },
+  m: { min: 1, max: 20 },
+  a: { min: -3, max: 3 },
+  b: { min: -3, max: 3 },
+  zoom: { min: 0.001, max: 0.1 },
+  speed: { min: 0.0, max: 0.2 },
+};
 
 export default function Simulation(props: SimulationProps) {
   const [world, setWorld] = useState<World>(initWorld());
-  const [parameters, setParameters] = useState<SimulationParameters>(initParameters());
+  const parameters = useRef<SimulationParameters>(initParameters());
 
   function initParameters(): SimulationParameters {
     return {
-      speed: 0.1,
       n: 7,
-      m: 2,
+      m: 1,
       a: 1,
       b: -1,
-      w: 0.01,
+      zoom: 0.01,
+      speed: 0.1,
     };
   }
 
@@ -40,7 +59,7 @@ export default function Simulation(props: SimulationProps) {
       y: { min: -100, max: 100 },
     };
 
-    const NUM_PARTICLES = 3000;
+    const NUM_PARTICLES = 5000;
     const particles = [];
     for (let i = 0; i < NUM_PARTICLES; i++) {
       const particle: Particle = {
@@ -67,11 +86,11 @@ export default function Simulation(props: SimulationProps) {
   }
 
   function updateParticle(particle: Particle, bounds: PointRange, deltaTime: number): Particle {
-    const { n, m, a, b, w, speed } = parameters;
+    const { n, m, a, b, zoom, speed } = parameters.current;
 
     const f = (x: number, y: number) =>
-      a * Math.sin(Math.PI * n * x * w) * Math.sin(Math.PI * m * y * w) +
-      b * Math.sin(Math.PI * m * x * w) * Math.sin(Math.PI * n * y * w);
+      a * Math.sin(Math.PI * n * x * zoom) * Math.sin(Math.PI * m * y * zoom) +
+      b * Math.sin(Math.PI * m * x * zoom) * Math.sin(Math.PI * n * y * zoom);
     const g = (x: number, y: number) => Math.abs(f(x, y));
 
     const { x, y } = particle.position;
@@ -89,9 +108,17 @@ export default function Simulation(props: SimulationProps) {
     };
   }
 
+  function onUpdateParameter(param: string, value: number) {
+    parameters.current = {
+      ...parameters.current,
+      [param]: value,
+    };
+  }
+
   return (
-    <div>
+    <div className="flex justify-center">
       <Graphics running={props.running} onUpdate={onUpdate} world={world} />
+      <Controls parameters={parameters.current} ranges={PARAM_RANGES} onUpdateParameter={onUpdateParameter} />
     </div>
   );
 }

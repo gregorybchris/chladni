@@ -65,7 +65,7 @@ export default function Graphics(props: GraphicsProps) {
   }
 
   function renderParticle(context: CanvasRenderingContext2D, particle: Particle) {
-    const particleRadius = 2;
+    const particleRadius = 1.4;
     const particleColor = Color.BLUE;
 
     const position = transformPosition(particle.position);
@@ -80,7 +80,7 @@ export default function Graphics(props: GraphicsProps) {
   }
 
   return (
-    <div className="w-full h-full flex justify-center">
+    <div className="">
       <canvas
         className="bg-gradient-to-tr from-zinc-800 to-zinc-700 shadow-[-10px_10px_60px_15px_rgba(0,0,0,0.5)]"
         ref={canvasRef}

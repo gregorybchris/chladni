@@ -10,9 +10,9 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-w-screen min-h-screen">
-      <div className="p-4 mx-auto">
-        <span className="flex justify-center pt-2 pb-16 text-2xl">resonate</span>
+    <div className="w-full h-full">
+      <div>
+        <span className="flex justify-center py-8 pb-16 text-2xl">resonate</span>
         <Simulation running={running} setRunning={setRunning} />
       </div>
     </div>
