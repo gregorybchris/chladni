@@ -1,7 +1,9 @@
 {
   "recommendations": [
+    "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "denoland.vscode-deno",
-    "sastan.twind-intellisense"
+    "sastan.twind-intellisense",
+    "syler.sass-indented",
+    "yzhang.markdown-all-in-one"
   ]
 }
