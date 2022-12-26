@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>chladni</title>
         <meta name="title" content="chladni" />
         <meta name="description" content="chladni" />
-        {/* <link rel="icon" href="/favicon.png" /> */}
+        <link rel="icon" href="/favicon.png" />
       </Head>
 
       <div className="min-w-screen min-h-screen bg-zinc-900 text-slate-200 font-main">
