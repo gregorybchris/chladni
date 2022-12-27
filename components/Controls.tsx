@@ -10,7 +10,7 @@ interface ControlsProps {
 
 export default function Controls(props: ControlsProps) {
   return (
-    <div className="w-48 pl-12">
+    <div className="w-64 md:w-48 pl-12">
       <Control range={props.ranges.a} v={props.params.a} param="a" onChange={props.onUpdate} />
       <Control range={props.ranges.b} v={props.params.b} param="b" onChange={props.onUpdate} />
       <Control range={props.ranges.n} v={props.params.n} param="n" onChange={props.onUpdate} />
@@ -32,8 +32,8 @@ interface ControlProps {
 function Control({ range, v, param, stepSize, onChange }: ControlProps) {
   return (
     <div className="flex items-center">
-      <div className="pr-3 align-middle">{param}</div>
-      <div className="align-middle w-32">
+      <div className="align-middle pr-3">{param}</div>
+      <div className="align-middle w-64 md:w-32">
         <Slider range={range} defaultValue={v} onChange={(v: number) => onChange(param, v)} stepSize={stepSize} />
       </div>
     </div>

@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import World from "../lib/models/world";
 import { useAnimationFrame } from "../lib/hooks/animation";
 import { Color, colorToHex } from "../lib/color";
 import Particle from "../lib/models/particle";
-import { Point, PointRange, scalePoint } from "../lib/math";
+import { Box, PointRange, scalePoint } from "../lib/math";
 
 interface GraphicsProps {
   running: boolean;
@@ -11,23 +11,30 @@ interface GraphicsProps {
   world: World;
 }
 
-const GRAPHICS_WIDTH = 600;
-const GRAPHICS_HEIGHT = 450;
-const GRAPHICS_BOUNDS: PointRange = {
-  x: { min: 0, max: GRAPHICS_WIDTH },
-  y: { min: 0, max: GRAPHICS_HEIGHT },
-};
-
 export default function Graphics(props: GraphicsProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  let graphicsViewPort: PointRange = {
-    x: { min: -50, max: GRAPHICS_WIDTH + 50 },
-    y: { min: -50, max: GRAPHICS_HEIGHT + 50 },
-  };
+  const [canvasSize, setCanvasSize] = useState<Box>({ width: 0, height: 0 });
   useAnimationFrame(props.onUpdate, props.running);
 
   useEffect(() => {
-    resizeCanvas(GRAPHICS_WIDTH, GRAPHICS_HEIGHT);
+    console.log("Adding event listeners for resize");
+
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      console.error("Couldn't get canvas");
+      return;
+    }
+
+    const observer = new ResizeObserver(() => {
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+      setCanvasSize({
+        width: canvas.clientWidth,
+        height: canvas.clientHeight,
+      });
+    });
+    observer.observe(canvas);
+    return () => observer.unobserve(canvas);
   }, []);
 
   useEffect(() => {
@@ -40,25 +47,10 @@ export default function Graphics(props: GraphicsProps) {
     }
 
     renderScene(context);
-  }, [props.world]);
-
-  function resizeCanvas(width: number, height: number) {
-    const canvas = canvasRef.current;
-    if (!canvas) {
-      console.error("Could not load canvas");
-      return;
-    }
-
-    canvas.width = width;
-    canvas.height = height;
-  }
+  }, [props.world, canvasSize]);
 
   function renderScene(context: CanvasRenderingContext2D) {
-    context.clearRect(0, 0, GRAPHICS_WIDTH, GRAPHICS_HEIGHT);
-    renderParticles(context);
-  }
-
-  function renderParticles(context: CanvasRenderingContext2D) {
+    context.clearRect(0, 0, canvasSize.width, canvasSize.height);
     props.world.particles.forEach((particle: Particle) => {
       renderParticle(context, particle);
     });
@@ -68,23 +60,23 @@ export default function Graphics(props: GraphicsProps) {
     const particleRadius = 1;
     const particleColor = Color.BLUE;
 
-    const position = transformPosition(particle.position);
+    const GRAPHICS_BOUNDS: PointRange = {
+      x: { min: 0, max: canvasSize.width },
+      y: { min: 0, max: canvasSize.height },
+    };
+    const position = scalePoint(particle.position, props.world.bounds, GRAPHICS_BOUNDS);
     context.beginPath();
     context.arc(position.x, position.y, particleRadius, 0, 2 * Math.PI);
     context.fillStyle = colorToHex(particleColor);
     context.fill();
   }
 
-  function transformPosition(point: Point): Point {
-    return scalePoint(point, props.world.bounds, GRAPHICS_BOUNDS);
-  }
-
   return (
-    <div className="">
+    <div className="w-full mx-8 h-96 md:mx-0 md:w-1/2 md:h-96 mb-10">
       <canvas
-        className="bg-gradient-to-tr from-zinc-800 to-zinc-700 shadow-[-10px_10px_60px_15px_rgba(0,0,0,0.5)]"
+        className="w-full h-full block bg-gradient-to-tr from-zinc-800 to-zinc-700 shadow-[-10px_10px_60px_15px_rgba(0,0,0,0.5)]"
         ref={canvasRef}
-      ></canvas>
+      />
     </div>
   );
 }

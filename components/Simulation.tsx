@@ -110,7 +110,7 @@ export default function Simulation(props: SimulationProps) {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex flex-wrap justify-center w-full h-full">
       <Graphics running={props.running} onUpdate={onUpdate} world={world} />
       <Controls params={parameters.current} ranges={paramRanges} onUpdate={onUpdateParameter} />
     </div>

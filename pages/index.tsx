@@ -11,14 +11,12 @@ export default function HomePage() {
 
   return (
     <div className="w-full h-full">
-      <div>
-        <div className="flex justify-center pt-8 pb-16">
-          <a className="" href="https://en.wikipedia.org/wiki/Ernst_Chladni#Chladni_figures" target="_blank">
-            <div className="py-2 px-4 text-2xl">chladni</div>
-          </a>
-        </div>
-        <Simulation running={running} setRunning={setRunning} />
+      <div className="pt-8 pb-16 text-center">
+        <a className="" href="https://en.wikipedia.org/wiki/Ernst_Chladni#Chladni_figures" target="_blank">
+          <div className="py-2 px-4 text-2xl">chladni</div>
+        </a>
       </div>
+      <Simulation running={running} setRunning={setRunning} />
     </div>
   );
 }
